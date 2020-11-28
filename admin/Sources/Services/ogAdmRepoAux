@@ -78,8 +78,9 @@ case "$PARM1" in
 		#3 opciones de multicast
 		FILE="$PARM2"
 		MCASTOPT="$PARM3"
-		echolog "Ejecutar $(which sendFileMcast) $FILE $MCASTOPT"
-		sendFileMcast $FILE $MCASTOPT &>> $MCASTLOG
+		IPINTEFAZ="$PARM4"
+		echolog "Ejecutar $(which sendFileMcast) $FILE $MCASTOPT $IPINTEFAZ"
+		sendFileMcast $FILE $MCASTOPT $IPINTEFAZ &>> $MCASTLOG
 		case $? in
 			1)  echolog "Parametros insuficientes"
 			    exit 1 ;;

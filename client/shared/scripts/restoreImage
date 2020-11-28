@@ -90,7 +90,10 @@ case "$PROTO" in
         #TODO comprobar parametros anteriores
         ogEcho log session "[40] ogMcastReceiverPartition $DISK $PART $PORT $TOOL $COMPRESS"
         ogMcastRequest "$IMGNAME.img" "$PROTOOPT" || exit $?
-        ogExecAndLog command ogMcastReceiverPartition "$DISK" "$PART" "$PORT" "$TOOL" "$COMPRESS"
+	NUMBER=$[ ( $RANDOM % 30 )  + 10 ]
+	ogEcho log session "[40] Esperando $NUMBER segundos para iniciar la conexion multicast"
+        sleep $NUMBER
+	ogExecAndLog command ogMcastReceiverPartition "$DISK" "$PART" "$PORT" "$TOOL" "$COMPRESS"
         RETVAL=$?
         ;;
     *)  # Protocolo desconocido.
