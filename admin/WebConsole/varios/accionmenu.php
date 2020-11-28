@@ -183,6 +183,7 @@ function pintaMenus($cmd,$identificador,$tipoaccion,$op)
 	global $TbMsg;
 	global $ITEM_PUBLICO;
 	global $ITEM_PRIVADO;
+	global $ITEM_OPERADOR;
 	global $op_modificacion;
 	global $descripcionaccion;
 	global $EJECUCION_PROCEDIMIENTO;
@@ -235,7 +236,8 @@ function pintaMenus($cmd,$identificador,$tipoaccion,$op)
 		
 		/* Tipo de item */
 		$parametros=$ITEM_PUBLICO."=".$TbMsg[5]."".chr(13);
-		$parametros.=$ITEM_PRIVADO."=".$TbMsg[6]."";
+		$parametros.=$ITEM_PRIVADO."=".$TbMsg[6]."".chr(13);
+		$parametros.=$ITEM_OPERADOR."=".$TbMsg[15]."";
 		echo '<TD align=center>'.HTMLCTESELECT($parametros,"tipositems-".$rs->campos["idmenu"],"estilodesple","",$rs->campos["tipoitem"],70).'</TD>';
 		
 		/* Imagen del item */

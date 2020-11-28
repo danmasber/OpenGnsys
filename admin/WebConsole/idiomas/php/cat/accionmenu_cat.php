@@ -2,21 +2,22 @@
 //________________________________________________________________________________________________________
 //
 //	Fitxer d'idiomes php: accionmenu_cat.php 
-//	Idioma: Catalï¿½
+//	Idioma: Català
 //________________________________________________________________________________________________________
 	$TbMsg=array();
 	$TbMsg[0]='Items';
-	$TbMsg[1]='Gestiï¿½ Items Menï¿½';
+	$TbMsg[1]='Gestió Items Menú';
 	$TbMsg[2]='Procediment';
 	$TbMsg[3]='Tasca';
 	$TbMsg[4]='Treballs';
-	$TbMsg[5]='Pï¿½blic';
+	$TbMsg[5]='Públic';
 	$TbMsg[6]='Privat';
-	$TbMsg[7]='Items pï¿½blics ';
+	$TbMsg[7]='Items públics ';
 	$TbMsg[8]='Items privats ';
-	$TbMsg[9]='Nom del Menï¿½';
+	$TbMsg[9]='Nom del Menú';
 	$TbMsg[10]='Tipus item';
 	$TbMsg[11]='Imatge del item';
 	$TbMsg[12]='Literal item';
 	$TbMsg[13]='Ord';
-	$TbMsg[14]='(*)Per a incloure alguna acciï¿½ en aquest menï¿½ ha de fer click sobre la casella de verificaciï¿½ corresponent. Per a actualitzar faci click sobre la imatge.';
+	$TbMsg[14]='(*)Per a incloure alguna acció en aquest menú ha de fer click sobre la casella de verificació corresponent. Per a actualitzar faci click sobre la imatge.';
+	$TbMsg[15]='Operador';

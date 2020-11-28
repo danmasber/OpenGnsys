@@ -140,8 +140,10 @@ function SubarbolXML_superadministradores($cmd){
 	global $cadenaXML;
 	global $SUPERADMINISTRADOR;
 	global $ADMINISTRADOR;
+	global $OPERADOR;
 	$rs=new Recordset; 
-	$cmd->texto="SELECT idusuario,nombre,idtipousuario FROM usuarios WHERE idtipousuario=".$SUPERADMINISTRADOR." OR idtipousuario=".$ADMINISTRADOR." ORDER by idtipousuario,nombre";
+	$cmd->texto="SELECT idusuario,nombre,idtipousuario FROM usuarios WHERE idtipousuario=".$SUPERADMINISTRADOR." OR idtipousuario=".$ADMINISTRADOR.
+		" OR idtipousuario=".$OPERADOR." ORDER by idtipousuario,nombre";	
 	$rs->Comando=&$cmd; 
 	if (!$rs->Abrir()) return($cadenaXML); // Error al abrir recordset
 	$rs->Primero(); 
@@ -150,9 +152,10 @@ function SubarbolXML_superadministradores($cmd){
 		// Atributos	
 	if($rs->campos["idtipousuario"]==$SUPERADMINISTRADOR)
 		$cadenaXML.=' imagenodo="../images/iconos/superadministradores.gif"';
-	else
+	else if($rs->campos["idtipousuario"]==$ADMINISTRADOR)
 		$cadenaXML.=' imagenodo="../images/iconos/administradores.gif"';
-
+	else if($rs->campos["idtipousuario"]==$OPERADOR)
+		$cadenaXML.=' imagenodo="../images/iconos/operadores.gif"';
 		$cadenaXML.=' clickcontextualnodo="menu_contextual(this,' ."'flo_".$LITAMBITO_USUARIOS."'" .')"';
 		$cadenaXML.=' infonodo="'.$rs->campos["nombre"].'"';
 		$cadenaXML.=' nodoid='.$LITAMBITO_USUARIOS.'-'.$rs->campos["idusuario"];
@@ -367,7 +370,8 @@ function CreacontextualXMLUsuarios(){
 	global $ADMINISTRADOR;
 	global $TbMsg;
 	global $SUPERADMINISTRADOR;
-
+	global $OPERADOR;
+	
 	$layerXML='<MENUCONTEXTUAL';
 	$layerXML.=' idctx="flo_administradores"';
 	$layerXML.=' maxanchu=170';
@@ -405,6 +409,18 @@ function CreacontextualXMLUsuarios(){
 	$layerXML.=' textoitem='.$TbMsg[9];
 	$layerXML.='></ITEM>';
 
+	// Crear operador
+	$wLeft=140;
+	$wTop=115;
+	$wWidth=400;
+	$wHeight=320;
+	$wpages="../propiedades/propiedades_usuarios.php?idtipousuario=".$OPERADOR;
+	$wParam=$wLeft .",".$wTop.",".$wWidth.",".$wHeight.",'". $wpages."'";
+	$layerXML.='<ITEM';
+	$layerXML.=' alpulsar="insertar('.$wParam.',0,3)"';
+	$layerXML.=' imgitem="../images/iconos/operadores.gif"';
+	$layerXML.=' textoitem='.$TbMsg[14];
+	$layerXML.='></ITEM>';
 	$layerXML.='</MENUCONTEXTUAL>';
 	return($layerXML);
 }
