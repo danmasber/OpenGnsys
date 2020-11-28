@@ -32,6 +32,9 @@ clean:
 uninstall: clean
 	rm -f /usr/local/sbin/$(PROYECTO) /usr/local/etc/$(PROYECTO).cfg
 
+sources/%.o: sources/%.cpp
+	gcc $(CFLAGS) -c -o"$@" "$<"
+
 sources/%.o: sources/%.c
 	gcc $(CFLAGS) -c -o"$@" "$<"
 

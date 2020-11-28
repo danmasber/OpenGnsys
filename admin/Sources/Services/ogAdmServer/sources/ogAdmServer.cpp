@@ -1235,7 +1235,7 @@ struct wol_msg {
 };
 
 static bool wake_up_broadcast(int sd, struct sockaddr_in *client,
-			      const struct wol_msg *msg)
+			      const struct wol_msg *msg, char *ip)
 {
 	struct sockaddr_in *broadcast_addr;
 	struct ifaddrs *ifaddr, *ifa;
@@ -1248,10 +1248,20 @@ static bool wake_up_broadcast(int sd, struct sockaddr_in *client,
 
 	client->sin_addr.s_addr = htonl(INADDR_BROADCAST);
 
+	std::string ipString(ip);
+	std::string firstCommand =  "ip route get "+ ipString + "| grep -oP 'dev \\K[\\w.]+'";
+	char firstCommandArray[firstCommand.size() + 1];
+	firstCommand.copy(firstCommandArray, firstCommand.size() + 1);
+	firstCommandArray[firstCommand.size()] = '\0';
+	std::string interfaz_out = execCommandShellScript(firstCommandArray);
+	if(interfaz_out == ""){
+		interfaz_out = std::string(interface);
+	}
+
 	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
 		if (ifa->ifa_addr == NULL ||
 		    ifa->ifa_addr->sa_family != AF_INET ||
-		    strcmp(ifa->ifa_name, interface) != 0)
+		    strcmp(ifa->ifa_name, interfaz_out.c_str()) != 0)
 			continue;
 
 		broadcast_addr =
@@ -1270,6 +1280,38 @@ static bool wake_up_broadcast(int sd, struct sockaddr_in *client,
 
 	return true;
 }
+
+	//_____________________________________________________________________________________________________________
+	// Función: execCommandShellScript
+	//
+	//	Descripción:
+	//		Ejecuta el comando pasado en la cadena command
+	//
+	//	Parámetros de entrada:
+	//		- command : Cadena con el contenido del command a ejecutar
+	//_____________________________________________________________________________________________________________
+
+	std::string execCommandShellScript(char* command) {
+	    char buffer[128];
+	    std::string result = "";
+	    FILE* pipe = popen(command, "r");
+	    if (!pipe) throw std::runtime_error("popen() failed!");
+	    try {
+	        while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+	            result += buffer;
+	        }
+	    } catch (...) {
+	        pclose(pipe);
+	        throw;
+	    }
+	    pclose(pipe);
+	    //elimino un salto de linea provacado por fgets
+	    if(result != ""){
+	    	result.erase(result.end()-1);  
+	    }
+	    
+	    return result;
+	}
 
 static bool wake_up_unicast(int sd, struct sockaddr_in *client,
 			    const struct wol_msg *msg,
@@ -1338,7 +1380,7 @@ bool WakeUp(int s, char* iph, char *mac, char *mar)
 
 	switch (atoi(mar)) {
 	case OG_WOL_BROADCAST:
-		ret = wake_up_broadcast(s, &WakeUpCliente, &Trama_WakeUp);
+		ret = wake_up_broadcast(s, &WakeUpCliente, &Trama_WakeUp, iph);
 		break;
 	case OG_WOL_UNICAST:
 		if (inet_aton(iph, &addr) < 0) {
