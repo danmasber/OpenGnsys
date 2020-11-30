@@ -34,8 +34,9 @@ else{
 	//________________________________________________________________________________________________________
 	$ITEMS_PUBLICOS=1;
 	$ITEMS_PRIVADOS=2;
+	$ITEMS_OPERADOR=3;
 
-	$tip=$ITEMS_PUBLICOS; // Tipo de items 1=Públicos 2=privados
+	$tip=$ITEMS_PUBLICOS; // Tipo de items 1=Públicos 2=privados 3=operador
 	if (isset($_GET["tip"]))	$tip=$_GET["tip"]; 
 
 	$iph=tomaIP();
@@ -82,7 +83,7 @@ else{
 				}
 				else{
 					$_SESSION["widcentro"]=$rsmenu->campos["idcentro"]; 
-					$codeHtml=GeneraMenu($rsmenu,$ITEMS_PUBLICOS,$iph); // Genera men pblico
+					$codeHtml=GeneraMenu($rsmenu,$ITEMS_PUBLICOS,$iph); // Genera menu publico
 				}
 				break;
 				
@@ -95,8 +96,20 @@ else{
 				}
 				else{
 					$_SESSION["widcentro"]=$rsmenu->campos["idcentro"]; 
-					$codeHtml=GeneraMenu($rsmenu,$ITEMS_PRIVADOS,$iph); // Genera men pblico
+					$codeHtml=GeneraMenu($rsmenu,$ITEMS_PRIVADOS,$iph); // Genera menu privado
 				}
+				break;
+			case $ITEMS_OPERADOR:
+				if(!empty($rsmenu->campos["htmlmenupri"])){
+					$urlHtml=$rsmenu->campos["htmlmenupri"];
+					
+					//if(strtoupper(substr($urlHtml,0,7))!="HTTP://") $urlHtml="http://".$urlHtml;
+					Header('Location: '.$urlHtml); // Url del menu personalizado
+				}
+				else{
+					$_SESSION["widcentro"]=$rsmenu->campos["idcentro"]; 
+					$codeHtml=GeneraMenu($rsmenu,$ITEMS_OPERADOR,$iph); // Genera menu recuperacion
+				}	
 				break;
 		}			
 	}

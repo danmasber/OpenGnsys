@@ -56,8 +56,9 @@ if ($idc != 0)
 
  $resul=toma_datos($cmd,$idc,$nmc,$idi,$usu,$tsu,$pss); 
  // Antes la variable idioma no es la correcta
- include_once("idiomas/php/$idi/acceso_$idi.php");
- if(!$resul) 
+ include_once("idiomas/php/$idi/acceso_$idi.php");]
+ $OPERADOR=3;
+ if(!$resul || (empty($iph) && $tsu == $OPERADOR)) // Solo permite acceder a un operador a su menu de cliente
      Header("Location: ".$wac."?herror=4"); // Error de conexión con servidor B.D. 
   
  if(!empty($iph)){ 
@@ -108,8 +109,7 @@ if ($idc != 0)
 				INNER JOIN administradores_centros ON administradores_centros.idusuario=usuarios.idusuario
 				INNER JOIN centros ON centros.idcentro=administradores_centros.idcentro
 				INNER JOIN idiomas ON usuarios.ididioma=idiomas.ididioma
-				WHERE idtipousuario <> 3
-				  AND usuarios.usuario='".$usuario."'
+				WHERE usuarios.usuario='".$usuario."'
 				  AND usuarios.pasguor=SHA2('".$pasguor."', 224)
 				  AND administradores_centros.idcentro=".$idcentro; 
 	}			
@@ -117,8 +117,7 @@ if ($idc != 0)
 		 $cmd->texto="SELECT usuarios.idtipousuario, idiomas.nemonico AS idioma
 				FROM usuarios
 				INNER JOIN idiomas ON usuarios.ididioma=idiomas.ididioma
-				WHERE idtipousuario <> 3
-				  AND usuarios.usuario='".$usuario."'
+				WHERE usuarios.usuario='".$usuario."'
 				  AND usuarios.pasguor=SHA2('".$pasguor."', 224)"; 
 	}
 	$rs->Comando=&$cmd; 
@@ -128,8 +127,11 @@ if ($idc != 0)
 		$idtipousuario=$rs->campos["idtipousuario"]; 
 		$idioma=$rs->campos["idioma"]; 
 		if(!empty($idcentro)){
+			if($idtipousuario == 1){
+                $idtipousuario=2; // Fuerza al acceso como administrador de UNidad organizativa cuando sea superadminsitrador y se seleccione un centro
+            }
+
 			$nombrecentro=$rs->campos["nombrecentro"]; 
-			$idtipousuario=2; // Fuerza al acceso como administrador de UNidad organizativa
 			return(true);
 		}
 		else{

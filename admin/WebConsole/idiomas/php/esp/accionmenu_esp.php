@@ -20,5 +20,4 @@
 	$TbMsg[12]='Literal item';
 	$TbMsg[13]='Ord.';
 	$TbMsg[14]='(*)Para incluir o excluir alguna acción en este menú debe hacer click sobre la casilla de verificación correspondiente';
-	$TbMsg[15]='A';
-
+	$TbMsg[15]='Operador';

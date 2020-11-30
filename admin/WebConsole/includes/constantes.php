@@ -120,6 +120,7 @@ $RESPUESTA_EJECUCION_PETICION=0x0004;
 // Código de los tipos de ítems de los menús de clientes
 $ITEM_PUBLICO=0x0001;
 $ITEM_PRIVADO=0x0002;
+$ITEM_OPERADOR=0x0003;
 
 //Codificación de los resultados de las acciones
 

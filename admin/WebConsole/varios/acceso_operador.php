@@ -17,10 +17,17 @@ if (isset($_POST["herror"])) $herror=$_POST["herror"];
 
 $ITEMS_PUBLICOS=1;
 $ITEMS_PRIVADOS=2;
+$ITEMS_OPERADOR=3;
 
-if (isset($_SESSION["swop"])){
-	// Acceso al menu de adminitración del aula
-	$wurl="menucliente.php?tip=".$ITEMS_PRIVADOS;
+if (isset($_SESSION["swoptipo"])){
+		if($_SESSION["swoptipo"]==1){
+			// Acceso al menu de adminitración del aula
+			$wurl="menucliente.php?tip=".$ITEMS_PRIVADOS;
+		}
+		// Acceso al menu de operador del aula
+		if($_SESSION["swoptipo"]==2){
+			$wurl="menucliente.php?tip=".$ITEMS_OPERADOR;
+		}	
 	Header('Location:'.$wurl); 
 }
 

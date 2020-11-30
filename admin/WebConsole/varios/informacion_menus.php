@@ -146,6 +146,7 @@ function SubarbolXML_Items($cmd,$idmenu){
 	global  $TbMsg;
 	global  $ITEM_PUBLICO;
 	global  $ITEM_PRIVADO;
+	global  $ITEM_OPERADOR;
 	global  $idcentro;
 	global  $EJECUCION_PROCEDIMIENTO;
 	global  $EJECUCION_TAREA;
@@ -168,6 +169,7 @@ function SubarbolXML_Items($cmd,$idmenu){
 
 	$swpub=false;
 	$swpriv=false;
+	$swoper=false;
 	
 	$cadenaXML.='<ITEMS';
 	$cadenaXML.=' imagenodo="../images/iconos/carpeta.gif"';
@@ -199,6 +201,26 @@ function SubarbolXML_Items($cmd,$idmenu){
 				$swpriv=true;
 			}	
 		}
+
+		if ($rs->campos["tipoitem"]==$ITEM_OPERADOR){
+			$contitempri++;
+			if ($swpub) {
+				$cadenaXML.='</ITEMSPUBLICOS>';
+				$swpub=false;
+			}
+			if ($swpriv) {
+				$cadenaXML.='</ITEMSPRIVADOS>';
+				$swpriv=false;
+			}
+			if (!$swoper) {
+				$cadenaXML.='<ITEMSRECUPERACION'; 
+				$cadenaXML.=' imagenodo="../images/iconos/carpeta.gif"';
+				$cadenaXML.=' infonodo="'.$TbMsg[23].'"';
+				$cadenaXML.='>';
+				$swoper=true;
+			}	
+		}
+
 		switch($rs->campos["tipoaccion"]){
 				case $EJECUCION_PROCEDIMIENTO :
 					$cmd->texto='SELECT  procedimientos.descripcion  FROM  procedimientos
@@ -219,6 +241,8 @@ function SubarbolXML_Items($cmd,$idmenu){
 				$cadenaXML.='</ITEMSPUBLICOS>';
 	if ($swpriv) 
 				$cadenaXML.='</ITEMSPRIVADOS>';
+	if ($swoper) 
+				$cadenaXML.='</ITEMSRECUPERACION>';		
 	$cadenaXML.='</ITEMS>';				
 	$rs->Cerrar();
 	return($cadenaXML);

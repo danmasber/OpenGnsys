@@ -22,8 +22,9 @@ $cmd=CreaComando($cadenaconexion);
 if (!$cmd)
 	Header('Location:acceso_operador.php?herror=2'); // Error de conexióncon servidor B.D.
 
-$ITEMS_PUBLICOS=1;
-$ITEMS_PRIVADOS=2;
+global $ITEM_PUBLICO; 
+global $ITEM_PRIVADO;
+global $ITEM_OPERADOR;
 
 // COntrol de acceso del usuario
 $rs=new Recordset;  
@@ -44,7 +45,23 @@ if ($rs->EOF){
 }
 // Acceso al menu de adminitración del aula
 //$wurl="menucliente.php?iph=".$iph."&tip=".$ITEMS_PRIVADOS;
-$wurl="menucliente.php?tip=".$ITEMS_PRIVADOS;
+$idtipousuario=$rs->campos["idtipousuario"]; 
+
+global $SUPERADMINISTRADOR; 
+global $ADMINISTRADOR; 
+global $OPERADOR; //Este tipo de usuario accederá aun menú distinto donde se mostrará los item_operador
+
+$wurl="menucliente.php?tip=".$ITEM_PUBLICO;
+if($idtipousuario==$SUPERADMINISTRADOR || $idtipousuario==$ADMINISTRADOR ){
+	$wurl="menucliente.php?tip=".$ITEM_PRIVADO;
+	$_SESSION["swoptipo"]=$ITEM_PRIVADOS;
+}
+
+if($idtipousuario==$OPERADOR){
+	$wurl="menucliente.php?tip=".$ITEM_OPERADOR;
+	$_SESSION["swoptipo"]=$ITEM_OPERADOR;
+}
+
 $_SESSION["swop"]=$usu; 
 Header('Location:'.$wurl); 
 exit;

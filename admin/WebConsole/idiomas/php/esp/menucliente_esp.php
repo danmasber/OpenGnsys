@@ -9,4 +9,5 @@
 	$TbMsg[1]='"Direcci&oacute;n IP"';
 	$TbMsg[2]='NO SE HA DETECTADO NING&Uacute;N MEN&Uacute; PARA ESTE CLIENTE';
 	$TbMsg[3]='Apagar el equipo';
-
+	$TbMsg[5]='Men&Uacute; de administrador';
+	$TbMsg[6]='Men&Uacute; de operador';
