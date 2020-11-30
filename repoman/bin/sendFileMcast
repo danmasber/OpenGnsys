@@ -1,3 +1,4 @@
+
 #!/bin/bash
 #@brief   Envía un fichero por multicast   ORIGEN(fichero) DESTINO(sessionmulticast)
 #@param   path_file      Camino completo del fichero a enviar
@@ -13,16 +14,32 @@ REPO_IFACE="$(/opt/opengnsys/bin/getRepoIface)"
 
 # Si se solicita, mostrar ayuda.
 if [ "$*" == "help" ]; then
-    echo "Formato: $PROG fichero|nombreImagen datosMulticast"
+    echo "Formato: $PROG fichero|nombreImagen datosMulticast [IPaAsociar]"
     echo "Ejemplo: $PROG /opt/opengnsys/images/imagen1.pgz 9000:full-duplex:239.194.17.2:70M:20:120"
     echo "Ejemplo: $PROG imagen1 9000:full:239.194.17.2:70M:20:120"
+    echo "Ejemplo: $PROG /opt/opengnsys/images/imagen1.pgz 9000:full-duplex:239.194.17.2:70M:20:120 172.17.2.1"
+    echo "Ejemplo: $PROG imagen1 9000:full:239.194.17.2:70M:20:120 172.17.2.1"
     exit 0
 fi
 # Error si no se reciben 2 parámetros.
-if [ $# -ne 2 ]; then
-    echo "$PROG Error: Formato: $PROG fichero|nombreImagen datosMulticast" 
+if [ $# -le 2 ]; then
+    echo "$PROG Error: Formato: $PROG fichero|nombreImagen datosMulticast [IPaAsociar]" 
     exit 1
 fi
+
+# Si se introdujo como argumento una interfaz a asociar se calculara la interfaz asociada a esta,
+# sino se asociara a la interfaz por defecto de Opengnsys
+if [ $# -eq 3 ]; then
+	REPO_IFACE="$(/opt/opengnsys/bin/getRepoIface $3)"
+    # De no poder calcularse se asignara a la interfaz por defecto de Opengnsys  
+    if [ "$REPO_IFACE" == "" ]; then
+       REPO_IFACE="$(/opt/opengnsys/bin/getRepoIface)"
+    fi
+else
+    REPO_IFACE="$(/opt/opengnsys/bin/getRepoIface)"
+fi
+
+
 
 # Fichero a enviar (camino completo o relativo al directorio del repositorio).
 FICH="$1"
@@ -56,8 +73,7 @@ fi
 # Valores estandar no configurables.
 CERROR="8x8/128"
 
-# Envío de fichero por Multicast.
-# Se desabilita el uso de mbuffer: esta versión del upd-sender no la admite.
-#which mbuffer &> /dev/null && MBUFFER="--pipe 'mbuffer -m 20M'" 
-$OGBIN/udp-sender "$MBUFFER" --nokbd --retries-until-drop 65 --portbase "$PORTBASE" "$METHOD" --interface "$REPO_IFACE" --mcast-data-address "$ADDRESS" --fec "$CERROR" --max-bitrate "$BITRATE" --ttl 16 --min-clients "$NCLIENTS" --max-wait "$MAXTIME" --file "$FICHIMG"
+$OGBIN/udp-sender "$MBUFFER" --nokbd --retries-until-drop 65 --interface "$REPO_IFACE" --portbase "$PORTBASE" "$METHOD" --mcast-data-address "$ADDRESS" --fec "$CERROR" --max-bitrate "$BITRATE" --ttl 16 --min-clients "$NCLIENTS" --max-wait "$MAXTIME" --file "$FICHIMG"
+ 
+
 

@@ -451,46 +451,8 @@ then
 	SERVERADDRESS=" --mcast-rdv-address ${SESSION[1]}"
 else
 	# Deteccion automatica de la subred del cliente para anadir la  IP del repositorio a la orden udp-receiver en el caso de encontrarse en distinta subred del repo
-	REPOIP="$(ogGetRepoIp)"
-	CLIENTIP=$(ip -o address show up | awk '$2!~/lo/ {if ($3~/inet$/) {printf ("%s ", $4)}}')
-	MASCARA=`echo $CLIENTIP | cut -f2 -d/`
-	CLIENTIP=`echo $CLIENTIP | cut -f1 -d/`
-	RIPBT=""
-	IPBT=""
-	for (( i = 1 ; i < 5 ; i++ ))
-	do
-		RIP=`echo $REPOIP | cut -f$i -d.`
-		RIP=`echo "$[$RIP + 256]"`
-		RIPB=""
-		while [ $RIP -gt 0 ]
-		do
-			let COCIENTE=$RIP/2
-			let RESTO=$RIP%2
-			RIPB=$RESTO$RIPB
-			RIP=$COCIENTE
-		done
-		RIPB=`echo "$RIPB" | cut -c2-`
-		RIPBT=$RIPBT$RIPB
-		IP=`echo $CLIENTIP | cut -f$i -d.`
-		IP=`echo "$[$IP + 256]"`
-		IPB=""
-		while [ $IP -gt 0 ]
-		do
-			let COCIENTE=$IP/2
-			let RESTO=$IP%2
-			IPB=$RESTO$IPB
-			IP=$COCIENTE
-		done
-		IPB=`echo "$IPB" | cut -c2-`
-		IPBT=$IPBT$IPB
-	done
-	REPOSUBRED=`echo $RIPBT | cut -c1-$MASCARA`
-	CLIENTSUBRED=`echo $IPBT | cut -c1-$MASCARA`
-	if [ $REPOSUBRED == $CLIENTSUBRED ]; then
-		SERVERADDRESS=" "
-	else
-		SERVERADDRESS=" --mcast-rdv-address $REPOIP"
-	fi
+	REPOIP="$(ip route show 0.0.0.0/0 | cut -d\  -f3)"
+	SERVERADDRESS=" --mcast-rdv-address $REPOIP"
 fi
 #La tercera opcion de la sesion para el cliente:  ${SESSION[2]}  ERRORSESSION -  TIMEOUT ERROR IF NO FOUNT SESSEION MULTICAST
 if ogCheckStringInReg ${SESSION[2]} "^[0-9]{1,10}$"  &>/dev/null
@@ -855,15 +817,16 @@ PROTOOPT="$2"
 PORT=$(echo $2 | cut -f1 -d":")
 let PORTAUX=$PORT+1
 REPOIP=$(ogGetRepoIp)
+REPOIPAUX=$(ip route show 0.0.0.0/0 | cut -d\  -f3)
 REPOPORTAUX=2009
 REPEAT=0
-until nmap -n -sU -p $PORTAUX $REPOIP | grep open
+until nmap -n -sU -p $PORTAUX $REPOIPAUX | grep open
 do
     let REPEAT=$REPEAT+1
     [ "$REPEAT" -lt 6 ] || ogRaiseError session log $OG_ERR_PROTOCOLJOINMASTER "MULTICAST \"$FILE\" \"$PROTOOPT\" $FILELIST" || return $?
     echo "$MSG_SCRIPTS_TASK_START :  hose $REPOIP $REPOPORTAUX --out sh -c "echo -ne START_MULTICAST $FILE $2""
     #update-cache:
-    hose $REPOIP $REPOPORTAUX --out sh -c "echo -ne START_MULTICAST "$FILE" "$PROTOOPT""
+    hose $REPOIP $REPOPORTAUX --out sh -c "echo -ne START_MULTICAST "$FILE" "$PROTOOPT" "$REPOIPAUX""
     #multicas-direct:  hose $REPOIP 2009 --out sh -c "echo -ne START_MULTICAST /$IMAGE.img $OPTPROTOCOLO"
     sleep 10
 done
