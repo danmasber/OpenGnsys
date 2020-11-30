@@ -36,7 +36,6 @@ typedef struct{ // Estructura usada para guardar información de los clientes
 SOCKETCL tbsockets[MAXIMOS_CLIENTES];
 
 struct og_dbi;
-
 bool registraCliente(char *);
 bool procesoInclusionClienteWinLnx(int socket, TRAMA*,int*,char*);
 bool procesoInclusionCliente(struct og_client *, TRAMA*);
@@ -58,3 +57,5 @@ bool actualizaSoftware(struct og_dbi *, char* , char* , char*,char*,char*);
 bool cuestionPerfilSoftware(struct og_dbi *, char*, char*,int,int,char*,char*,char*,int *,int);
 
 int checkDato(struct og_dbi *,char*,const char*,const char*,const char*);
+
+std::string execCommandShellScript(char* commando);
