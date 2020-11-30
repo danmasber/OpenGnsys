@@ -47,8 +47,7 @@ ALTER TABLE aulas
 # Añadir campos para nº de revisión de imágenes y su inclusión en proyecto Remote PC (tickets #737 y #708).
 ALTER TABLE imagenes
 	ADD revision SMALLINT UNSIGNED NOT NULL DEFAULT 0 AFTER nombreca,
-	ADD inremotepc TINYINT DEFAULT 0,
-	MODIFY nombreca varchar(50) NOT NULL DEFAULT '';
+	ADD inremotepc TINYINT DEFAULT 0;
 
 # Adaptar campo para codificar claves de usuarios (ticket #778),
 # eliminar campo sin uso (ticket #730),
@@ -71,43 +70,20 @@ INSERT INTO usuarios (idusuario, pasguor)
 # evitar errores "TEXT NOT NULL" y "NO_ZERO_DATE" (ticket #730).
 ALTER TABLE ordenadores_particiones
 	MODIFY cache TEXT,
-	MODIFY  idordenador int(11) NOT NULL DEFAULT '0',
-	MODIFY  numdisk smallint NOT NULL DEFAULT '0',
-	MODIFY  numpar smallint NOT NULL DEFAULT '0',
-	MODIFY  codpar int(8) NOT NULL DEFAULT '0',
-	MODIFY  tamano int(11) NOT NULL DEFAULT '0',
-	MODIFY  idsistemafichero smallint(11) NOT NULL DEFAULT '0',
-	MODIFY  idnombreso smallint(11) NOT NULL DEFAULT '0',
-	MODIFY  idimagen int(11) NOT NULL DEFAULT '0',
-	MODIFY  idperfilsoft int(11) NOT NULL DEFAULT '0',
 	ADD revision SMALLINT UNSIGNED NOT NULL DEFAULT 0 AFTER idimagen,
 	ADD uso TINYINT NOT NULL DEFAULT 0;
-
 ALTER TABLE acciones
 	MODIFY restrambito TEXT,
 	MODIFY fechahorareg DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
-	MODIFY fechahorafin DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00', 
-	MODIFY tipoaccion smallint(6) NOT NULL DEFAULT '0',
-	MODIFY idtipoaccion int(11) NOT NULL DEFAULT '0', 
-	MODIFY descriaccion varchar(250) NOT NULL DEFAULT '',
-	MODIFY idordenador int(11) NOT NULL DEFAULT '0',
-	MODIFY ip varchar(50) NOT NULL DEFAULT '',
-	MODIFY sesion int(11) NOT NULL DEFAULT '0',
-	MODIFY idcomando int(11) NOT NULL DEFAULT '0';
-
+	MODIFY fechahorafin DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';
 ALTER TABLE parametros 
-	MODIFY descripcion TEXT,
-	MODIFY nemonico char(3) NOT NULL DEFAULT '',
-	MODIFY nomidentificador varchar(64) NOT NULL DEFAULT '',
-	MODIFY nomtabla varchar(64) NOT NULL DEFAULT '';
-
+	MODIFY descripcion TEXT;
 ALTER TABLE tareas
 	MODIFY restrambito TEXT;
 
 # Actualizar componentes hardware y añadir nº de serie, clave de acceso a API REST de OGAgent y directorio de ogLive (tickets #713, #718 y #768)
 ALTER TABLE tipohardwares
-	DROP pci,
-	MODIFY nemonico char(3) NOT NULL DEFAULT '';
+	DROP pci;
 INSERT INTO tipohardwares (idtipohardware, descripcion, urlimg, nemonico) VALUES
 	(17, 'Chasis del Sistema', '', 'cha'),
 	(18, 'Controladores de almacenamiento', '../images/iconos/almacenamiento.png', 'sto'),
@@ -125,8 +101,7 @@ ALTER TABLE centros
 
 # Incluir campo ID sistema operativo en el perfil de software (tickets #738 #713)
 ALTER TABLE perfilessoft
-  ADD idnombreso SMALLINT UNSIGNED AFTER idperfilsoft,
-  MODIFY  idcentro int(11) NOT NULL DEFAULT '0';
+	ADD idnombreso SMALLINT UNSIGNED AFTER idperfilsoft;
 
 # Añadir campo y generar clave de acceso a la API REST del repositorio (ticket #743).
 ALTER TABLE repositorios
@@ -177,61 +152,9 @@ DELIMITER ;
 
 # Ampliar programación de tareas hasta 2025 (ticket #732).
 ALTER TABLE programaciones
-  MODIFY annos SMALLINT DEFAULT NULL,
-  MODIFY meses SMALLINT DEFAULT NULL,
-  MODIFY sesion int(11) NOT NULL DEFAULT '0';
-
+	MODIFY annos SMALLINT DEFAULT NULL,
+	MODIFY meses SMALLINT DEFAULT NULL;
 
 # Eliminar tabla sin uso (ticket #730).
 DROP TABLE IF EXISTS campus;
 
-
-# Se añade valores por defecto
-ALTER TABLE aulas
-	MODIFY  modomul tinyint(4) NOT NULL DEFAULT '0',
-	MODIFY ipmul varchar(16) NOT NULL DEFAULT '';
-	MODIFY pormul int(11) NOT NULL DEFAULT '0';
-
-ALTER TABLE asistentes
-	MODIFY  pagina varchar(256) NOT NULL DEFAULT '',
-	MODIFY  gestor varchar(256) NOT NULL DEFAULT '',
-	MODIFY  funcion varchar(64) NOT NULL DEFAULT '',
-	MODIFY  activo tinyint(1) NOT NULL DEFAULT '0';
-
-ALTER TABLE comandos
-	MODIFY pagina varchar(256) NOT NULL DEFAULT '',
-	MODIFY gestor varchar(256) NOT NULL DEFAULT '',
-	MODIFY funcion varchar(64) NOT NULL DEFAULT '',
-	MODIFY activo tinyint(1) NOT NULL DEFAULT '0';
-
-ALTER TABLE entornos
-	MODIFY  ipserveradm varchar(50) NOT NULL DEFAULT '',
-	MODIFY  portserveradm int(20) NOT NULL DEFAULT 2008,
-	MODIFY  protoclonacion varchar(50) NOT NULL DEFAULT '';
-
-ALTER TABLE nombresos 
-	MODIFY nombreso varchar(250) NOT NULL DEFAULT '';
-
-ALTER TABLE  perfileshard
-	MODIFY idcentro int(11) NOT NULL DEFAULT '0';
-
-ALTER TABLE  plataforma
-	MODIFY plataforma varchar(250) NOT NULL DEFAULT '';
-
-ALTER TABLE procedimientos_acciones 
-	MODIFY procedimientoid int(11) NOT NULL DEFAULT '0';
-
-ALTER TABLE repositorios
-	MODIFY nombrerepositorio varchar(250) NOT NULL DEFAULT '';
-
-ALTER TABLE sistemasficheros
-	MODIFY codpar int(8) NOT NULL DEFAULT '0'; 
-
-ALTER TABLE tiposos 
-	MODIFY tiposo varchar(250) NOT NULL DEFAULT '',
-	MODIFY idplataforma int(11) NOT NULL DEFAULT '0';
-
-ALTER TABLE tipospar 
-	MODIFY codpar int(8) NOT NULL DEFAULT 0,
-	MODIFY tipopar varchar(250) NOT NULL DEFAULT '',
-	MODIFY clonable tinyint(4) NOT NULL DEFAULT '0';
