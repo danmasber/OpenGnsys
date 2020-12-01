@@ -78,7 +78,9 @@ function RecuperaMenu($cmd,$iph){
 function GeneraMenu($rs,$tipo,$iph){	
 	global $ITEMS_PUBLICOS;
 	global $ITEMS_PRIVADOS;
+	global $ITEMS_OPERADOR;
 	global $UrlPaginaIconos;
+	global  $TbMsg;
 	$lit='';
 	$titulo=$rs->campos["titulo"]; 
 	$modalidad=$rs->campos["modalidad"]; 
@@ -87,7 +89,8 @@ function GeneraMenu($rs,$tipo,$iph){
 	$htmlmenupub=$rs->campos["htmlmenupub"]; 
 	$htmlmenupri=$rs->campos["htmlmenupri"]; 
 			
-	if($tipo==$ITEMS_PRIVADOS)
+	//La el numero de columnas sera el mismo para el menu de adminstrador y el de operador
+	if($tipo==$ITEMS_PRIVADOS || $tipo==$ITEMS_OPERADOR)
 		$mod=$smodalidad;
 	else
 		$mod=$modalidad;
@@ -97,7 +100,12 @@ function GeneraMenu($rs,$tipo,$iph){
 	$codeHTML.='<P align=center>';
 	$codeHTML.='<SPAN style="COLOR: #999999;FONT-FAMILY: Arial, Helvetica, sans-serif;FONT-SIZE: 20px;"><U>'.$titulo.'</U></SPAN>';
 	$codeHTML.='</BR>';
-	
+	// Añade un titulo para diferenciar menu de adminstrador y de operario
+        if($tipo==$ITEMS_PRIVADOS)
+		$codeHTML.='<SPAN style="COLOR: #999999;FONT-FAMILY: Arial, Helvetica, sans-serif;FONT-SIZE: 20px;"><U>'.$TbMsg[5].'</U></SPAN>';
+	if($tipo==$ITEMS_OPERADOR)
+		$codeHTML.='<SPAN style="COLOR: #999999;FONT-FAMILY: Arial, Helvetica, sans-serif;FONT-SIZE: 20px;"><U>'.$TbMsg[6].'</U></SPAN>';
+
 	$codeHTML.='<TABLE cellspacing=4 cellpadding=0 align="center" border=0 >';
 	$codeHTML.='<TR>';
 	$codeHTML.='<TD colspan="'.(($mod*2)+1).'" >&nbsp;</TD>';
@@ -148,6 +156,7 @@ function GeneraMenu($rs,$tipo,$iph){
 			$url.='acceso_operador.php';
 			$lit="Administrar";
 			break;
+		case $ITEMS_OPERADOR:
 		case $ITEMS_PRIVADOS:
 			$url.='menucliente.php';
 			$lit="Volver";
