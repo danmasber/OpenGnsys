@@ -56,7 +56,7 @@ if ($idc != 0)
 
  $resul=toma_datos($cmd,$idc,$nmc,$idi,$usu,$tsu,$pss); 
  // Antes la variable idioma no es la correcta
- include_once("idiomas/php/$idi/acceso_$idi.php");]
+ include_once("idiomas/php/$idi/acceso_$idi.php");
  $OPERADOR=3;
  if(!$resul || (empty($iph) && $tsu == $OPERADOR)) // Solo permite acceder a un operador a su menu de cliente
      Header("Location: ".$wac."?herror=4"); // Error de conexión con servidor B.D. 
