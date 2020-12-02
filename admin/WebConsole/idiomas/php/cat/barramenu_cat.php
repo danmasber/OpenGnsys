@@ -21,3 +21,11 @@
 	$TbMsg[14]='Cercar';
 	$TbMsg[15]='Netboot Avançat';
 	$TbMsg[16]='Unitat Organitzativa';
+	$TbMsg[17]='Opcions Avançades';
+    $TbMsg[18]='Guacamole';
+    $TbMsg[19]='Sincronitzaci&oacute; amb guacamole';
+    $TbMsg[20]='Gestor d\'arxius';
+	$TbMsg[21]='Administració de l\'interruptor';
+    $TbMsg[21]='Gestió de switch';
+
+

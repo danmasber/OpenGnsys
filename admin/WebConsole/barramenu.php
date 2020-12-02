@@ -21,6 +21,7 @@ include_once("./includes/constantes.php");
 include_once("./includes/CreaComando.php");
 include_once("./clases/AdoPhp.php");
 include_once("./idiomas/php/".$idioma."/barramenu_".$idioma.".php");
+include_once("./personalizado/modificador_menu.php");
 //________________________________________________________________________________________________________
 
 //________________________________________________________________________________________________________
@@ -234,7 +235,9 @@ if (!$cmd)
 											<TD onclick=eleccion(this,21); onmouseout=desresaltar(this); onmouseover=resaltar(this); align=middle>
 											&nbsp;<A href="#" style="text-decoration: none"><IMG border=0 src="./images/iconos/usuarioslog.gif">&nbsp;<SPAN class=menupral ><?php echo  $TbMsg[10] ?></SPAN></A>&nbsp;</TD>
 											<TD width=4 align=middle><IMG src="./images/iconos/separitem.gif"></TD>
-
+								<?php 
+									añadirOpcionGestionAvanzada($TbMsg);
+								?>
 
 <?php if($idtipousuario!=$SUPERADMINISTRADOR){ ?>
 <TD>

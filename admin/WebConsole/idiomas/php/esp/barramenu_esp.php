@@ -21,5 +21,9 @@
 	$TbMsg[14]='Buscar';
 	$TbMsg[15]='Netboot Avanzado';
 	$TbMsg[16]='Unidad Organizativa';
-
+	$TbMsg[17]='Opciones Avanzadas';
+	$TbMsg[18]='Guacamole';
+	$TbMsg[19]='Sincronizaci&oacute;n con Guacamole';
+	$TbMsg[20]='Gestor de ficheros';
+	$TbMsg[21]='Gesion de switch';
 

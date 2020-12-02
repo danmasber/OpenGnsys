@@ -1,8 +1,8 @@
 <?php
 //________________________________________________________________________________________________________
 //
-//	Php language file:: barramenu_eng.php
-//	Language: English
+//	Fichero de idiomas php: barramenu_eng.php 
+//	Idioma: Ing�s 
 //________________________________________________________________________________________________________
 	$TbMsg=array();
 	$TbMsg[0]='Labs';
@@ -12,7 +12,7 @@
 	$TbMsg[4]='Software';
 	$TbMsg[5]='Servers';
 	$TbMsg[6]='Menus';
-	$TbMsg[7]='Reservations';
+	$TbMsg[7]='Reserves';
 	$TbMsg[8]='Administration';
 	$TbMsg[9]='Icons';
 	$TbMsg[10]='Exit';
@@ -21,3 +21,10 @@
 	$TbMsg[14]='Search';
 	$TbMsg[15]='Advanced Netboot';
 	$TbMsg[16]='Organizational Unit';
+    $TbMsg[17='Advanced Options';
+    $TbMsg[18]='Guacamole';
+    $TbMsg[19]='Sync with guacamole';
+    $TbMsg[20]='Files manager';
+    $TbMsg[21]='Switch management';
+
+
