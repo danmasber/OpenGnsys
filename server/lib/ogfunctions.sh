@@ -86,6 +86,7 @@ function dbexec () {
 [client]
 user=$USUARIO
 password=$PASSWORD
+host=$datasource
 EOT
     mysql --defaults-extra-file="$MYCNF" -D "$CATALOG" -s -N -e "$1" || \
         raiseError access "Cannot access the databse"

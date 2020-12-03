@@ -40,13 +40,26 @@ done
 # Detecting network interfaces.
 DEVICES=$(ip -o link show up | awk -F: '$2!~/lo/ {print $2}')
 for DEV in $DEVICES; do
-	# If the network interface is found, get its IP address.
+         # If the network interface is found, get its IP address.
 	IP=$(ip -o addr show dev "$DEV" | awk '$3~/inet$/ {sub (/\/.*/, ""); print ($4)}')
-	if [ "$DEV" == "$1" ] || [ "$IP" == "$1" ]; then
-		SERVERIP="$IP"
+    if echo "$IP" | grep -q "$1"; then
 		SERVERDEV="$DEV"
-	fi
-done
+		SERVERIP="$1"
+    fi
+    if [ "$DEV" == "$1" ]; then
+        SERVERDEV="$DEV"
+	    if [ "$(echo "$IP"| wc -w)" != "1" ]; then
+	        while  ! echo "$IP" | grep -q "^${SERVERIP}$"; do
+	                echo "La interfaz elgida tiene varias direcciones IP asociadad debes elegir una "
+	                echo "$IP"
+	                echo -ne "Introduce la direccion IP: "
+	                read -r SERVERIP
+	        done
+	    else
+	        SERVERIP="$IP"
+	    fi
+    fi
+ done
 
 # Checking if IP address has been detected.
 if [ -n "$SERVERIP" ]; then

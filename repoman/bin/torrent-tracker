@@ -19,3 +19,6 @@ pkill bttrack
 rm -f $BTTRACKDFILE
 sleep 2
 bttrack $BTTRACK_OPTIONS &>> $BTTRACKLOG &
+
+################### Aniadio guardado del PID para que tanto la parada como el check de status se pueda hacer correctamete #######################################
+pgrep bttrack > $BTTRACKPID 

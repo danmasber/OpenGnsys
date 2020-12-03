@@ -6,8 +6,8 @@
 # Required-Stop:
 # Default-Start:     2 3 4 5
 # Default-Stop:      1
-# Short-Description: Servicios del sistema OpenGnsys
-# Description:       Servicios del sistema OpenGnsys
+# Short-Description: Servicios del sistema OpenGnsys Modificado para ser usado con http://www.linux-ha.org/wiki/LSB_Resource_Agent
+# Description:       Servicios del sistema OpenGnsys Modificado para ser usado con http://www.linux-ha.org/wiki/LSB_Resource_Agent
 ### END INIT INFO
 
 #
@@ -76,10 +76,10 @@ fi
 # Configuración de arranque según la distribución Linux usada.
 config() {
     if [ -f /etc/os-release ]; then
-	source /etc/os-release
-	OSDISTRIB="$ID"
+  source /etc/os-release
+  OSDISTRIB="$ID"
     else
-	OSDISTRIB=$(lsb_release -is 2>/dev/null)
+  OSDISTRIB=$(lsb_release -is 2>/dev/null)
     fi
     OSDISTRIB="${OSDISTRIB,,}"
     case "$OSDISTRIB" in
@@ -88,20 +88,24 @@ config() {
             DAEMONSTART="start-stop-daemon --start --quiet --background --exec"
             EXTRAOPTS="--"
             DAEMONSTOP="start-stop-daemon --stop --quiet --oknodo --name"
+            DEAMONSTATUS="start-stop-daemon --status --quiet --oknodo --name"
             ACTIONMSG="log_daemon_msg"
             SUCCESSMSG="log_end_msg 0"
             FAILMSG="log_end_msg 1"
             TRACKERSTART="start-stop-daemon --make-pidfile --pidfile $BTTRACKPID --start --quiet --background --exec"
             BTTRACK_OPTIONS="$BTTRACK_OPTIONS --parse_allowed_interval 1"
             TRACKERSTOP="start-stop-daemon --stop --quiet --oknodo --retry 30 --pidfile $BTTRACKPID"
+            TRACKERSTATUS="start-stop-daemon --status --quiet --oknodo --pidfile $BTTRACKPID"
             SEEDERSTART="start-stop-daemon --make-pidfile --pidfile $BTSEEDERPID --start --quiet --background --exec"
             SEEDERSTOP="start-stop-daemon --stop --quiet --oknodo --pidfile $BTSEEDERPID"
+            SEEDERSTATUS="start-stop-daemon --status --quiet --oknodo --pidfile $BTSEEDERPID"
             ;;
         centos|fedora)
             INITFUNCTIONS=/etc/init.d/functions
             DAEMONSTART="daemon"
             ENDOPTS="&"
             DAEMONSTOP="killproc"
+            DEAMONSTATUS="pidofproc"
             ACTIONMSG="echo -n"
             SUCCESSMSG="eval ( success; echo )"
             FAILMSG="eval ( failure; echo )"
@@ -109,8 +113,10 @@ config() {
             BTSEEDER=/usr/bin/btlaunchmany.py
             TRACKERSTART="daemon --pidfile $BTTRACKPID"
             TRACKERSTOP="killproc -p $BTTRACKPID $BTTRACK"
+            TRACKERSTATUS="pidofproc -p $BTTRACKPID $BTTRACK"
             SEEDERSTART="daemon --pidfile $BTSEEDERPID"
             SEEDERSTOP="killproc -p $BTSEEDERPID $BTSEEDER"
+            SEEDERSTATUS="pidofproc -p $BTSEEDERPID $BTSEEDER"
             ;;
         *)  echo "Distribución Linux desconcocida o no soportada."
             exit ;;
@@ -200,6 +206,92 @@ para_demonios() {
   [ $? = 0 ] && $SUCCESSMSG || $FAILMSG
 }
 
+estado_demonios() {
+  STATUSSTOP="FALSE"
+  # Compure los servicios indicados.
+  if [ $RUN_OGADMSERVER = "yes" ]; then
+     $ACTIONMSG "Comprobando demonio: $SERVERNAME"
+     $DEAMONSTATUS $SERVERNAME
+     if [ $? = 0 ]; then
+         $SUCCESSMSG
+     else
+        $FAILMSG
+        STATUSSTOP="TRUE"
+     fi  
+     $ACTIONMSG "Comprobando demonio: $SERVERAUXNAME"     
+     auxstatus "$SERVERAUXNAME"    #   NUEVO
+      if [ $? = 0 ]; then
+         $SUCCESSMSG
+     else
+        $FAILMSG
+        STATUSSTOP="TRUE"
+     fi  
+  fi
+  if [ $RUN_OGADMREPO = "yes" ]; then
+     $ACTIONMSG "Comprobando demonio: $REPOAUXNAME"
+     auxstatus "$REPOAUXNAME"
+      if [ $? = 0 ]; then
+         $SUCCESSMSG
+     else
+        $FAILMSG
+        STATUSSTOP="TRUE"
+     fi  
+  fi
+
+  if [ $RUN_OGADMAGENT = "yes" ]; then
+     $ACTIONMSG "Comprobando demonio: $AGENTNAME"
+     $DEAMONSTATUS $AGENTNAME
+      if [ $? = 0 ]; then
+         $SUCCESSMSG
+     else
+        $FAILMSG
+        STATUSSTOP="TRUE"
+     fi  
+  fi    
+
+  if [ $RUN_BTTRACKER = "yes" ]; then
+     $ACTIONMSG "Comprobando demonio: $BTTRACK"
+     if [ -e $BTTRACKPID ]; then
+      $TRACKERSTATUS
+      if [ $? = 0 ]; then
+        $SUCCESSMSG
+      else
+        $FAILMSG
+        STATUSSTOP="TRUE"
+      fi  
+    else
+        $FAILMSG
+        STATUSSTOP="TRUE"
+     fi
+  fi
+
+  if [ $RUN_BTSEEDER = "yes" ]; then
+    $ACTIONMSG "Comprobando demonio: $BTSEEDER"
+    if [ -e $BTSEEDERPID ]; then
+      $SEEDERSTATUS 
+      if [ $? = 0 ]; then
+         $SUCCESSMSG
+     else
+        $FAILMSG
+        STATUSSTOP="TRUE"
+     fi  
+    else
+      $FAILMSG
+        STATUSSTOP="TRUE"
+    fi
+  fi
+
+  if [ STATUSSTOP = "TRUE" ]; then
+    return 3
+  else
+    return 0
+  fi
+}
+
+auxstatus() {
+  return $(ps x | grep -v 'grep'| grep  -E 'faucet' | grep -q $1)
+}
+
 config
 
 case "$1" in
@@ -209,16 +301,19 @@ case "$1" in
   stop)
         para_demonios
         ;;
+  status)
+        estado_demonios
+        exit $?
+        ;;
   restart)
         para_demonios
         arranca_demonios
         ;;
 
   *)
-        echo "Uso: $0 {start|stop|restart}"
+        echo "Uso: $0 {start|stop|restart|status}"
         exit 1
         ;;
 esac
 
 exit 0
-

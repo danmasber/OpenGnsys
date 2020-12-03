@@ -1,7 +1,7 @@
 
 <?php
 
-define('OG_REST_URL', 'http://127.0.0.1:8888/');
+
 
 define('GET', 1);
 define('POST', 2);
@@ -62,7 +62,7 @@ define('OG_REST_PARAM_ECHO', 'echo');
 
 $conf_file = parse_ini_file(__DIR__ . '/../../etc/ogAdmServer.cfg');
 define('OG_REST_API_TOKEN', 'Authorization: ' . $conf_file['APITOKEN']);
-
+define('OG_REST_URL', 'http://'. $conf_file['ServidorAdm'] .':8888/');
 function common_request($command, $type, $data = null) {
 
 	$json = json_encode($data);
