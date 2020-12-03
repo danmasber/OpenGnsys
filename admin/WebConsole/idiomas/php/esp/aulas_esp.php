@@ -56,4 +56,17 @@
 	$TbMsg[48]='"Log en tiempo real"';
 	$TbMsg[49]='"Sincronización"';	
 	$TbMsg[50]='"Sincronización 2"';	
-	$TbMsg[51]='"Mover ordenadores de Aula"';	
+	$TbMsg[51]='"Enviar operaciones"';
+	$TbMsg[52]='"Borrar selección"';
+	$TbMsg[53]='Enceder';
+	$TbMsg[54]='Apagar';
+	$TbMsg[55]='Enviar Archivos';
+	$TbMsg[56]='Enviar Comando';
+	$TbMsg[57]='Enviar procedimiento';
+	$TbMsg[58]='Ninguna';
+	$TbMsg[59]='Seleccionar acción para todos';
+	$TbMsg[60]='Ventana seleccion de ficheros a enviar y procedimiento a usar';
+	$TbMsg[61]='Mostrar/Ocultar <br>seleccion operaciones';
+	$TbMsg[62]='Procedimiento a enviar';
+	$TbMsg[63]='Ninguno';
+

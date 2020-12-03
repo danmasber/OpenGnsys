@@ -54,6 +54,19 @@
 	$TbMsg[46]='Identificador àmbit';
 	$TbMsg[47]='"Log històric"';
 	$TbMsg[48]='"Log en temps real"';	
-	$TbMsg[49]='"Sincronización"';
-	$TbMsg[50]='"Sincronización 2"';
-	$TbMsg[51]='"Moure ordinadors d Aula"';
+    $TbMsg[49]='"Sincronización"';
+    $TbMsg[50]='"Sincronización 2"';
+	$TbMsg[51]='"Enviar operacions"';
+	$TbMsg[52]='"Elimina selecció"';
+	$TbMsg[53] = 'Encendre';
+	$TbMsg[54] = 'Apaga';
+	$TbMsg[55] = 'Envia Arxius';
+	$TbMsg[56] = 'Envia Comando';
+	$TbMsg[57] = 'Enviar procediment';
+	$TbMsg[58] = 'Ha cap';
+	$TbMsg[59] = 'Seleccionar acció per a tots';
+	$TbMsg[60] = 'Finestra selecció de fitxers a enviar i procediment a utilitzar';
+	$TbMsg[61] = 'Mostra/Amaga <br> a la seleccion operacions';
+	$TbMsg[62] = 'Procediment a enviar';
+	$TbMsg[63] = 'Cap';
+

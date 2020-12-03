@@ -18,6 +18,7 @@ include_once("../includes/CreaComando.php");
 include_once("../idiomas/php/".$idioma."/aulas_".$idioma.".php");
 include_once("../idiomas/php/".$idioma."/estados_".$idioma.".php");
 include_once("../idiomas/php/".$idioma."/comandos/mensajes_".$idioma.".php");
+include_once("../personalizado/modificador_aula.php");
 //________________________________________________________________________________________________________
 $litambito=0; 
 $idambito=0; 
@@ -49,6 +50,9 @@ if (!$cmd)
 	<HEAD>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<LINK rel="stylesheet" type="text/css" href="../estilos.css">
+		<?php 
+			añadirDependencias(); 
+		?>
 	</HEAD>
 <BODY OnContextMenu="return false">
 	<SCRIPT language="javascript" src="../clases/jscripts/ArbolVistaXML.js"></SCRIPT>
@@ -258,9 +262,12 @@ function pintaordenadores(){
 	global $cadenaip;
 	global $idaula;
 	global $nombreaula;
+	global $nombreambito;
 	global $idordprofesor;
 	global $servidorhidra,$hidraport;
 	global $TbMsg;
+
+	añadirInicioModificacion($nombreambito);
 
 	$ntr=0; // Numero de ordenadores por fila
 	if ($nombreaula!=""){
@@ -287,6 +294,9 @@ function pintaordenadores(){
 		echo '	<strong><font color="#D0A126">'.$Mip[$i].'</font></strong>';			
 		echo '	</br>';
 		echo '	<font color="#003300" size="1" face="Arial, Helvetica, sans-serif">'.$Mmac[$i].'</font>';
+
+		añadirOpcionesModificacion($Mnombreordenador[$i],$Mmac[$i],$Mip[$i],$TbMsg);
+
 		echo '</td>';
 		echo '</tr>';
 		echo '</table>';
@@ -297,6 +307,9 @@ function pintaordenadores(){
 		}
 	}
 	echo '</TABLE>';
+
+	añadirFinModificacion($nombreambito,$TbMsg);
+	
 	echo '<p>';
 	echo '<table style="border: #d4d0c8 1px solid; background: #eeeeee" align="center">';
 	echo '  <tr align="center" valign="top">';
