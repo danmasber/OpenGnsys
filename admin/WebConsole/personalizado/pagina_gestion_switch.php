@@ -241,12 +241,8 @@ include_once("../includes/ctrlacc.php");
 	    1.2. Switch Cisco 3750G-24TS
 	</h2>
 	<p>
-	    Se dispone de tres scripts que usan el programa minicom junto a su funci&oacute;n
-	    de script para guiar tres procesos:
-	</p>
-	<p>
-	    scriptBackupConfiguration.sh que permite realizar copiar de la
-	    configuraci&oacute;n actual del switch.
+	    Se dispone de seis scripts que usan el programa minicom junto a su funci&oacute;n
+	    de script para guiar seis procesos:
 	</p>
 	<ul>
 		<li>
@@ -532,14 +528,13 @@ include_once("../includes/ctrlacc.php");
 	    1.3. Switch HP 2620-25 o 2650-25
 	</h2>
 	<p>
-	    Se dispone de tres scripts que usan el programa minicom junto a su funci&oacute;n
-	    de script para guiar tres procesos:
-	</p>
-	<p>
-	    scriptBackupConfiguration.sh que permite realizar copiar de la
-	    configuraci&oacute;n actual del switch.
+	    Se dispone de seis scripts que usan el programa minicom junto a su funci&oacute;n
+	    de script para guiar seis procesos:
 	</p>
 	<ul>
+		<li>
+		   scriptBackupConfiguration.sh que permite realizar copiar de la configuraci&oacute;n actual del switch.
+		</li>
 		<li>
 		    scriptLoadConfiguration.sh que permite cargar una configuraci&oacute;n al switch
 		</li>
@@ -772,13 +767,12 @@ include_once("../includes/ctrlacc.php");
 	    1.1. Switch Cisco 3750G-24TS o Switch HP 2620-25 o 2650-25
 	</h2>
 	<p>
-	    Se dispone de tres scripts que usan el programa Expect y Ssh para guiar
-	    tres procesos:
+	    Se dispone de seis scripts que usan el programa Expect y Ssh para guiar
+	    seis procesos:
 	</p>
 	<ul>
 		<li>
-		    scriptBackupConfiguration.sh que permite realizar copiar de la
-		    configuraci&oacute;n actual del switch.
+		    scriptBackupConfiguration.sh que permite realizar copiar de la configuraci&oacute;n actual del switch.
 		</li>
 		<li>
 		    scriptLoadConfiguration.sh que permite cargar una configuraci&oacute;n al switch
